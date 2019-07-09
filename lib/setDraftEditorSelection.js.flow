@@ -238,10 +238,6 @@ function addFocusToSelection(selection: Object, node: Node, offset: number, sele
     // Added rangeCount check
     // selection.addRange(range.cloneRange());
     // https://stackoverflow.com/questions/22935320/uncaught-indexsizeerror-failed-to-execute-getrangeat-on-selection-0-is-not
-    if (selection.rangeCount === 0) {
-      selection.addRange(null);
-    }
-
     if (selection.rangeCount > 0) {
       const range = selection.getRangeAt(0);
       range.setEnd(node, offset);
