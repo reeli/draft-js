@@ -50,9 +50,9 @@ function anonymizeTextWithin(
     const length = node.textContent.length;
     return document.createTextNode(
       '[text ' +
-        length +
-        (labels.length ? ' | ' + labels.join(', ') : '') +
-        ']',
+      length +
+      (labels.length ? ' | ' + labels.join(', ') : '') +
+      ']',
     );
   }
 
@@ -257,7 +257,7 @@ function addFocusToSelection(
       selection.extend(node, offset);
     } catch (e) {
       DraftJsDebugLogging.logSelectionStateFailure({
-        anonymizedDom: getAnonymizedEditorDOM(node, function(n) {
+        anonymizedDom: getAnonymizedEditorDOM(node, function (n) {
           const labels = [];
           if (n === activeElement) {
             labels.push('active element');
@@ -302,9 +302,15 @@ function addFocusToSelection(
     // Additionally, clone the selection range. IE11 throws an
     // InvalidStateError when attempting to access selection properties
     // after the range is detached.
-    const range = selection.getRangeAt(0);
-    range.setEnd(node, offset);
-    selection.addRange(range.cloneRange());
+
+    // Added rangeCount check
+    // selection.addRange(range.cloneRange());
+    // https://stackoverflow.com/questions/22935320/uncaught-indexsizeerror-failed-to-execute-getrangeat-on-selection-0-is-not
+    if (selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      range.setEnd(node, offset);
+      selection.addRange(range.cloneRange());
+    }
   }
 }
 
